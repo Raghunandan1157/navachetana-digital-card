@@ -135,6 +135,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Generate QR code for sharing
             const qrCodeData = generateVCard(cardData);
 
+            // Generate vCard data for contact saving
+            const vCardData = generateVCard(cardData);
+
             // Try Web Share API first (works on iOS 12.2+ and Android)
             if (navigator.share) {
                 try {
@@ -148,54 +151,95 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error('Web Share API error:', error);
                     // If user cancels or error occurs, show copy option
                     if (error.name !== 'AbortError') {
-                        showCopyOption(shareUrl);
+                        showCopyOption(shareUrl, vCardData);
                     }
                 }
             } else {
                 // Fallback for browsers without Web Share API
-                showCopyOption(shareUrl);
+                showCopyOption(shareUrl, vCardData);
             }
         });
     }
 
-    // Show copy option with a nice UI
-    function showCopyOption(shareUrl) {
-        // Create a modal/dialog for copying
-        const copyDialog = document.createElement('div');
-        copyDialog.style.position = 'fixed';
-        copyDialog.style.top = '50%';
-        copyDialog.style.left = '50%';
-        copyDialog.style.transform = 'translate(-50%, -50%)';
-        copyDialog.style.background = 'white';
-        copyDialog.style.padding = '24px';
-        copyDialog.style.borderRadius = '12px';
-        copyDialog.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
-        copyDialog.style.zIndex = '1000';
-        copyDialog.style.maxWidth = '90%';
-        copyDialog.style.textAlign = 'center';
+    // Show share options with two links
+    function showCopyOption(shareUrl, vCardData) {
+        // Create a modal/dialog for sharing options
+        const shareDialog = document.createElement('div');
+        shareDialog.style.position = 'fixed';
+        shareDialog.style.top = '50%';
+        shareDialog.style.left = '50%';
+        shareDialog.style.transform = 'translate(-50%, -50%)';
+        shareDialog.style.background = 'white';
+        shareDialog.style.padding = '24px';
+        shareDialog.style.borderRadius = '12px';
+        shareDialog.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
+        shareDialog.style.zIndex = '1000';
+        shareDialog.style.maxWidth = '90%';
+        shareDialog.style.width = '400px';
+        shareDialog.style.textAlign = 'center';
 
-        const urlInput = document.createElement('input');
-        urlInput.type = 'text';
-        urlInput.value = shareUrl;
-        urlInput.readOnly = true;
-        urlInput.style.width = '100%';
-        urlInput.style.padding = '12px';
-        urlInput.style.margin = '12px 0';
-        urlInput.style.border = '1px solid #ddd';
-        urlInput.style.borderRadius = '6px';
-        urlInput.style.fontSize = '14px';
+        // Create vCard download link
+        const vCardBlob = new Blob([vCardData], { type: 'text/vcard' });
+        const vCardUrl = URL.createObjectURL(vCardBlob);
 
-        const copyButton = document.createElement('button');
-        copyButton.textContent = 'Copy Link';
-        copyButton.style.background = 'linear-gradient(135deg, #0d7068 0%, #5a9e1e 100%)';
-        copyButton.style.color = 'white';
-        copyButton.style.border = 'none';
-        copyButton.style.padding = '12px 24px';
-        copyButton.style.borderRadius = '8px';
-        copyButton.style.fontSize = '16px';
-        copyButton.style.fontWeight = '600';
-        copyButton.style.cursor = 'pointer';
-        copyButton.style.marginTop = '12px';
+        shareDialog.innerHTML = `
+            <h3 style="margin-bottom: 16px; color: #0d7068;">Share This Card</h3>
+            <p style="margin-bottom: 12px; color: #666;">Choose how to share:</p>
+
+            <div style="margin: 16px 0;">
+                <a href="${shareUrl}" target="_blank" style="
+                    display: block;
+                    background: #0d7068;
+                    color: white;
+                    text-decoration: none;
+                    padding: 12px;
+                    border-radius: 8px;
+                    margin-bottom: 12px;
+                    font-weight: 500;
+                ">
+                    <i class="fa-solid fa-globe"></i> Open Website
+                </a>
+                <p style="font-size: 12px; color: #888; margin: -8px 0 8px;">View the digital business card</p>
+            </div>
+
+            <div style="margin: 16px 0;">
+                <a href="${vCardUrl}" download="${encodeURIComponent(cardData.name)}.vcf" style="
+                    display: block;
+                    background: #5a9e1e;
+                    color: white;
+                    text-decoration: none;
+                    padding: 12px;
+                    border-radius: 8px;
+                    margin-bottom: 12px;
+                    font-weight: 500;
+                ">
+                    <i class="fa-solid fa-address-book"></i> Save Contact
+                </a>
+                <p style="font-size: 12px; color: #888; margin: -8px 0 8px;">Download as vCard to save to contacts</p>
+            </div>
+
+            <div style="margin: 20px 0; border-top: 1px solid #eee; padding-top: 16px;">
+                <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Or copy the website link:</p>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" value="${shareUrl}" readonly style="
+                        flex: 1;
+                        padding: 10px;
+                        border: 1px solid #ddd;
+                        border-radius: 6px;
+                        font-size: 13px;
+                    ">
+                    <button id="copy-link-btn" style="
+                        background: #0d7068;
+                        color: white;
+                        border: none;
+                        padding: 10px 16px;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        font-weight: 500;
+                    ">Copy</button>
+                </div>
+            </div>
+        `;
 
         const closeButton = document.createElement('button');
         closeButton.textContent = 'Close';
@@ -206,17 +250,15 @@ document.addEventListener('DOMContentLoaded', () => {
         closeButton.style.borderRadius = '6px';
         closeButton.style.fontSize = '14px';
         closeButton.style.cursor = 'pointer';
-        closeButton.style.marginLeft = '12px';
+        closeButton.style.marginTop = '16px';
 
-        copyDialog.innerHTML = `<h3 style="margin-bottom: 16px; color: #0d7068;">Share This Card</h3>
-                                <p style="margin-bottom: 12px; color: #666;">Copy this link to share your business card:</p>`;
-        copyDialog.appendChild(urlInput);
-        copyDialog.appendChild(copyButton);
-        copyDialog.appendChild(closeButton);
-
-        document.body.appendChild(copyDialog);
+        shareDialog.appendChild(closeButton);
+        document.body.appendChild(shareDialog);
 
         // Copy functionality
+        const copyButton = shareDialog.querySelector('#copy-link-btn');
+        const urlInput = shareDialog.querySelector('input');
+        
         copyButton.addEventListener('click', () => {
             urlInput.select();
             urlInput.setSelectionRange(0, 99999);
@@ -225,9 +267,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(() => {
                     copyButton.textContent = 'Copied! ✓';
                     copyButton.style.background = '#8CC63F';
-                    setTimeout(() => {
-                        document.body.removeChild(copyDialog);
-                    }, 1500);
                 })
                 .catch((error) => {
                     console.error('Copy failed:', error);
@@ -237,13 +276,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Close functionality
         closeButton.addEventListener('click', () => {
-            document.body.removeChild(copyDialog);
+            document.body.removeChild(shareDialog);
+            URL.revokeObjectURL(vCardUrl); // Clean up
         });
 
         // Close when clicking outside
-        copyDialog.addEventListener('click', (e) => {
-            if (e.target === copyDialog) {
-                document.body.removeChild(copyDialog);
+        shareDialog.addEventListener('click', (e) => {
+            if (e.target === shareDialog) {
+                document.body.removeChild(shareDialog);
+                URL.revokeObjectURL(vCardUrl); // Clean up
             }
         });
     }
