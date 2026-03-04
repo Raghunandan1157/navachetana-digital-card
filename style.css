@@ -64,71 +64,110 @@
     }
 }
 
-/* Mobile-specific adjustments */
+/* Mobile-specific adjustments - COMPLETE REDESIGN */
 @media (max-width: 480px) {
-    .card-left {
-        width: 60%;
-        padding: 20px 16px 16px 20px;
+    /* Card container - make it more compact and better proportioned */
+    .card {
+        height: auto;
+        min-height: 320px;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
     }
 
+    /* Hide the complex SVG background on mobile and use solid colors */
+    .card-bg-svg {
+        display: none;
+    }
+
+    /* Card content layer - better layout */
+    .card-content-layer {
+        flex-direction: column;
+    }
+
+    /* Card left - now full width on top with solid teal background */
+    .card-left {
+        width: 100%!important;
+        padding: 20px 18px 15px 18px;
+        background: #0d7068;
+        position: relative;
+        z-index: 3;
+    }
+
+    /* Card right - now full width on bottom with white background */
     .card-right {
-        width: 40%;
+        width: 100%!important;
+        height: 120px;
+        padding: 15px;
+        background: white;
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
+    /* Logo - better sizing and positioning */
     .official-logo {
-        max-width: 140px;
-        max-height: 180px;
+        max-width: 160px;
+        max-height: 100px;
         object-fit: contain;
-        margin-left: 10px;
+        margin: 0 auto;
+        display: block;
+    }
+
+    /* Person info - better typography */
+    .person-info {
+        border-left: none;
+        padding-left: 0;
+        margin-bottom: 12px;
     }
 
     .person-info h1 {
-        font-size: 18px;
-        margin-bottom: 1px;
+        font-size: 20px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 4px;
+        letter-spacing: 0.5px;
     }
 
     .person-info h2 {
-        font-size: 12px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #e0f2f1;
+        letter-spacing: 0.3px;
+    }
+
+    /* Contact details - better spacing and readability */
+    .contact-details {
+        gap: 10px;
+    }
+
+    .contact-row {
+        gap: 10px;
     }
 
     .contact-icon {
-        width: 18px;
-        height: 18px;
-        font-size: 8px;
+        width: 22px;
+        height: 22px;
+        font-size: 10px;
     }
 
     .contact-row span {
-        font-size: 11px;
-        line-height: 1.3;
+        font-size: 13px;
+        color: white;
+        line-height: 1.4;
+        font-weight: 500;
     }
 
     .address-block p {
-        font-size: 10px;
-        line-height: 1.3;
-    }
-
-    .share-btn {
-        padding: 10px 20px;
-        font-size: 15px;
+        font-size: 12px;
+        color: #e0f2f1;
+        line-height: 1.4;
+        margin-bottom: 6px;
     }
 
     /* Hide JSON block on mobile to save space */
     .json-block {
         display: none;
-    }
-
-    /* Make card more compact */
-    .card {
-        height: auto;
-        min-height: 300px;
-    }
-
-    /* Adjust contact details spacing */
-    .contact-details {
-        gap: 10px;
     }
 
     /* Make form more compact on mobile */
@@ -145,45 +184,68 @@
         padding: 9px 12px;
         font-size: 13px;
     }
+
+    /* Better share button */
+    .share-btn {
+        padding: 12px 20px;
+        font-size: 15px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Fix QR section width */
+    .qr-section, .share-section {
+        width: 100%;
+    }
+
+    /* Better card wrapper */
+    .card-wrapper {
+        width: 100%;
+    }
 }
 
 /* Extra small devices */
 @media (max-width: 360px) {
+    /* Card container - even more compact */
+    .card {
+        min-height: 300px;
+    }
+
+    /* Card left - full width */
     .card-left {
-        width: 65%;
-        padding: 16px 12px 12px 16px;
+        width: 100%!important;
+        padding: 18px 16px 12px 16px;
     }
 
+    /* Card right - slightly shorter */
     .card-right {
-        width: 35%;
+        width: 100%!important;
+        height: 100px;
     }
 
+    /* Logo - smaller */
     .official-logo {
-        max-width: 120px;
-        max-height: 160px;
-        margin-left: 8px;
+        max-width: 140px;
+        max-height: 80px;
     }
 
+    /* Person info - slightly smaller */
     .person-info h1 {
-        font-size: 16px;
+        font-size: 18px;
     }
 
+    /* Contact details - smaller text */
     .contact-row span {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .address-block p {
-        font-size: 9px;
-    }
-
-    /* Make card even more compact */
-    .card {
-        min-height: 280px;
+        font-size: 11px;
     }
 
     /* Adjust preview panel */
     .preview-panel {
-        padding: 0 10px;
+        padding: 0 8px;
     }
 }
 =======
