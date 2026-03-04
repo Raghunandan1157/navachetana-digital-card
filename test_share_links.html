@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Share Links</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-result {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        a {
+            display: block;
+            margin: 10px 0;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        a:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Share Links Test</h1>
+    <p>Testing the two share links functionality...</p>
+
+    <div id="test-results"></div>
+
+    <script>
+        // Test data
+        const testCardData = {
+            name: "John Doe",
+            designation: "Software Engineer",
+            phone: "+1 555-123-4567",
+            email: "john@example.com",
+            location: "123 Main St\nAnytown, USA"
+        };
+
+        // Generate vCard (same function as in script.js)
+        function generateVCard(data) {
+            const cleanPhone = data.phone.replace(/[\s\-]/g, '');
+            const nameParts = data.name.split(' ');
+            const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+            const firstName = nameParts.slice(0, -1).join(' ') || data.name;
+
+            return [
+                'BEGIN:VCARD',
+                'VERSION:3.0',
+                `FN:${data.name}`,
+                `N:${lastName};${firstName};;;`,
+                `TITLE:${data.designation}`,
+                `ORG:Navachetana Livelihoods Private Limited`,
+                `TEL;TYPE=CELL:${cleanPhone}`,
+                `EMAIL:${data.email}`,
+                `URL:https://navachetanalivelihoods.com`,
+                `ADR;TYPE=WORK:;;${data.location.replace(/\n/g, ', ')};;;;`,
+                'END:VCARD'
+            ].join('\n');
+        }
+
+        // Test the functionality
+        function runTests() {
+            const resultsDiv = document.getElementById('test-results');
+            
+            try {
+                // Test 1: Generate share URL
+                const shareData = btoa(JSON.stringify(testCardData));
+                const shareUrl = `?data=${encodeURIComponent(shareData)}`;
+                
+                // Test 2: Generate vCard data
+                const vCardData = generateVCard(testCardData);
+                const vCardBlob = new Blob([vCardData], { type: 'text/vcard' });
+                const vCardUrl = URL.createObjectURL(vCardBlob);
+
+                // Display results
+                resultsDiv.innerHTML = `
+                    <div class="test-result success">
+                        <h3>✅ Tests Passed!</h3>
+                        <p><strong>Website Link:</strong> <a href="${shareUrl}" target="_blank">Open Website</a></p>
+                        <p><strong>Contact Link:</strong> <a href="${vCardUrl}" download="${encodeURIComponent(testCardData.name)}.vcf">Save Contact</a></p>
+                        <p><strong>vCard Content:</strong></p>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto;">${vCardData}</pre>
+                    </div>
+                `;
+
+                console.log('Share URL:', shareUrl);
+                console.log('vCard URL:', vCardUrl);
+                console.log('vCard Data:', vCardData);
+
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="test-result error">
+                        <h3>❌ Test Failed!</h3>
+                        <p>Error: ${error.message}</p>
+                        <p>Stack: ${error.stack}</p>
+                    </div>
+                `;
+                console.error('Test error:', error);
+            }
+        }
+
+        // Run tests when page loads
+        window.onload = runTests;
+    </script>
+</body>
+</html>
