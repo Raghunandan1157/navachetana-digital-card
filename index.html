@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Business Card Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- LEFT: Form Panel -->
+        <div class="form-panel">
+            <div class="form-header">
+                <h2><i class="fa-solid fa-pen-to-square"></i> Edit Business Card</h2>
+                <p class="form-subtitle">Fill in the details below to update the card live</p>
+            </div>
+
+            <form id="card-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name"><i class="fa-solid fa-user"></i> Full Name</label>
+                        <input type="text" id="name" value="Suresh B.K." placeholder="Enter full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="designation"><i class="fa-solid fa-briefcase"></i> Designation</label>
+                        <input type="text" id="designation" value="CEO" placeholder="Enter designation">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone"><i class="fa-solid fa-phone"></i> Phone Number</label>
+                        <input type="text" id="phone" value="+91 - 9986015737" placeholder="Enter phone number">
+                    </div>
+                    <div class="form-group">
+                        <label for="email"><i class="fa-solid fa-envelope"></i> Email ID</label>
+                        <input type="email" id="email" value="suresh.bk@navachetanagroup.com" placeholder="Enter email">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="location"><i class="fa-solid fa-location-dot"></i> Location</label>
+                    <textarea id="location" rows="3" placeholder="Enter office address">No.201, 2nd Floor,
+60 Feet Road, Shankar Nagar Main Road,
+Nandini Layout, Bengaluru - 560 096</textarea>
+                </div>
+            </form>
+
+            <div class="json-block">
+                <div class="json-header">
+                    <span><i class="fa-solid fa-code"></i> Saved JSON Data</span>
+                    <span class="live-badge">● LIVE</span>
+                </div>
+                <pre id="json-output"></pre>
+            </div>
+        </div>
+
+        <!-- RIGHT: Card Preview -->
+        <div class="preview-panel">
+            <h3 class="preview-title">Card Preview</h3>
+
+            <div class="card-wrapper">
+                <div class="card" id="business-card">
+
+                    <!-- Background SVG for the teal + green swoosh + white area -->
+                    <svg class="card-bg-svg" viewBox="0 0 700 380" preserveAspectRatio="none">
+                        <!-- Teal left background -->
+                        <rect width="700" height="380" fill="#0d7068" />
+
+                        <!-- Dark green swoosh transition -->
+                        <path d="M320,0 C360,80 300,200 340,380 L700,380 L700,0 Z" fill="#5a9e1e" opacity="0.7" />
+
+                        <!-- Bright lime green swoosh -->
+                        <path d="M350,0 C400,100 330,240 380,380 L700,380 L700,0 Z" fill="#8CC63F" />
+
+                        <!-- White right area -->
+                        <path d="M390,0 C440,110 370,260 420,380 L700,380 L700,0 Z" fill="#ffffff" />
+                    </svg>
+
+                    <!-- Card Content Layer -->
+                    <div class="card-content-layer">
+
+                        <!-- LEFT INFO -->
+                        <div class="card-left">
+                            <div class="person-info">
+                                <h1 id="preview-name">Suresh B.K.</h1>
+                                <h2 id="preview-designation">CEO</h2>
+                            </div>
+
+                            <div class="contact-details">
+                                <div class="contact-row">
+                                    <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+                                    <span id="preview-phone">+91 - 9986015737</span>
+                                </div>
+                                <div class="contact-row">
+                                    <div class="contact-icon"><i class="fa-solid fa-globe"></i></div>
+                                    <span id="preview-email">suresh.bk@navachetanagroup.com</span>
+                                </div>
+                                <div class="contact-row address-row">
+                                    <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+                                    <div class="address-block">
+                                        <p id="preview-location">No.201, 2nd Floor,<br>60 Feet Road,
+                                            Shankar Nagar Main Road,<br>Nandini Layout, Bengaluru - 560 096</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT LOGO -->
+                        <div class="card-right">
+                            <img src="Official Logo.jpg" alt="Navachetana Livelihoods Logo" class="official-logo">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- QR Code Section -->
+            <div class="qr-section">
+                <div class="qr-header">
+                    <i class="fa-solid fa-qrcode"></i>
+                    <span>Scan to Save Contact</span>
+                    <span class="live-badge">● LIVE</span>
+                </div>
+                <div class="qr-body">
+                    <div id="qr-code"></div>
+                    <p class="qr-hint">QR code updates automatically as you edit the card</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

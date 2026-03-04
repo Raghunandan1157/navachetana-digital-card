@@ -1,0 +1,426 @@
+/* ==============================
+   RESET & GLOBAL
+============================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #e8f5e9 0%, #e0f2f1 50%, #f1f8e9 100%);
+    min-height: 100vh;
+    color: #333;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ==============================
+   APP LAYOUT
+============================== */
+.app-container {
+    display: flex;
+    max-width: 1250px;
+    margin: 40px auto;
+    gap: 45px;
+    padding: 0 25px;
+    align-items: flex-start;
+}
+
+/* ==============================
+   FORM PANEL
+============================== */
+.form-panel {
+    flex: 1;
+    max-width: 500px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.form-header h2 {
+    color: #0d7068;
+    font-size: 22px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-subtitle {
+    color: #888;
+    font-size: 13px;
+    margin-top: 4px;
+    margin-bottom: 22px;
+}
+
+.form-row {
+    display: flex;
+    gap: 14px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #444;
+    font-size: 13px;
+}
+
+.form-group label i {
+    color: #0d7068;
+    margin-right: 5px;
+    font-size: 12px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    color: #333;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    background: #fafafa;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #8CC63F;
+    box-shadow: 0 0 0 3px rgba(140, 198, 63, 0.15);
+    background: #fff;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+/* JSON block */
+.json-block {
+    margin-top: 24px;
+    background: #1a1a2e;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #333;
+}
+
+.json-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: #16213e;
+    color: #eee;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.json-header i {
+    margin-right: 6px;
+    color: #8CC63F;
+}
+
+.live-badge {
+    font-size: 11px;
+    color: #8CC63F;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    animation: livePulse 1.5s infinite;
+}
+
+@keyframes livePulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+}
+
+.json-block pre {
+    padding: 14px 16px;
+    color: #e6cd69;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+/* ==============================
+   PREVIEW PANEL
+============================== */
+.preview-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.preview-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #777;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+}
+
+.card-wrapper {
+    /* subtle shadow box around the card */
+    filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.18));
+}
+
+/* ==============================
+   THE BUSINESS CARD (LANDSCAPE)
+============================== */
+.card {
+    width: 700px;
+    height: 380px;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+}
+
+/* Full background SVG layer */
+.card-bg-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Content overlay */
+.card-content-layer {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+/* ----- LEFT SIDE (Teal area with info) ----- */
+.card-left {
+    width: 55%;
+    padding: 32px 30px 25px 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #fff;
+}
+
+.person-info {
+    border-left: 3px solid #8CC63F;
+    padding-left: 14px;
+}
+
+.person-info h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #8CC63F;
+    margin-bottom: 2px;
+    letter-spacing: 0.5px;
+}
+
+.person-info h2 {
+    font-size: 14px;
+    font-weight: 400;
+    color: #d0f0e0;
+    letter-spacing: 0.3px;
+}
+
+/* Contact details */
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.contact-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.contact-icon {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    background: #8CC63F;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #fff;
+    margin-top: 2px;
+}
+
+.contact-row span {
+    font-size: 13px;
+    color: #f0f0f0;
+    line-height: 1.5;
+    letter-spacing: 0.2px;
+    font-weight: 500;
+}
+
+.address-block p {
+    font-size: 11.5px;
+    color: #e8e8e8;
+    line-height: 1.55;
+    margin-bottom: 8px;
+    font-weight: 400;
+}
+
+.address-block p:last-child {
+    margin-bottom: 0;
+}
+
+/* ----- RIGHT SIDE (White area with logo) ----- */
+.card-right {
+    width: 45%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.official-logo {
+    max-width: 220px;
+    max-height: 260px;
+    object-fit: contain;
+    /* Positioned slightly to the right area */
+    margin-left: 30px;
+}
+
+
+/* ==============================
+   QR CODE SECTION
+============================== */
+.qr-section {
+    margin-top: 30px;
+    width: 700px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.qr-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: #0d7068;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.qr-header i {
+    font-size: 16px;
+    color: #8CC63F;
+}
+
+.qr-header .live-badge {
+    margin-left: auto;
+}
+
+.qr-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px 20px 20px;
+}
+
+#qr-code {
+    padding: 12px;
+    background: #fff;
+    border: 2px solid #e8e8e8;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+#qr-code img,
+#qr-code canvas {
+    display: block;
+}
+
+.qr-hint {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #999;
+    letter-spacing: 0.2px;
+}
+
+/* ==============================
+   RESPONSIVE
+============================== */
+@media (max-width: 1050px) {
+    .app-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-panel {
+        max-width: 700px;
+        width: 100%;
+    }
+
+    .card {
+        width: 620px;
+        height: 340px;
+    }
+
+    .official-logo {
+        max-width: 180px;
+    }
+}
+
+@media (max-width: 650px) {
+    .card {
+        width: 95vw;
+        height: auto;
+        aspect-ratio: 700 / 380;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .person-info h1 {
+        font-size: 20px;
+    }
+
+    .contact-row span {
+        font-size: 11px;
+    }
+
+    .address-block p {
+        font-size: 10px;
+    }
+}
