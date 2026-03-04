@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Share button functionality
     const shareButton = document.getElementById('share-button');
     if (shareButton) {
-        shareButton.addEventListener('click', () => {
+        shareButton.addEventListener('click', async () => {
             // Get current card data
             const cardData = {
                 name: inputs.name.value.trim(),
@@ -135,24 +135,115 @@ document.addEventListener('DOMContentLoaded', () => {
             // Generate QR code for sharing
             const qrCodeData = generateVCard(cardData);
 
-            // Use Web Share API if available
+            // Try Web Share API first (works on iOS 12.2+ and Android)
             if (navigator.share) {
-                navigator.share({
-                    title: `${cardData.name}'s Business Card`,
-                    text: `Check out ${cardData.name}'s digital business card`,
-                    url: shareUrl
-                })
-                .then(() => console.log('Share successful'))
-                .catch((error) => {
+                try {
+                    await navigator.share({
+                        title: `${cardData.name}'s Business Card`,
+                        text: `Check out ${cardData.name}'s digital business card:\n${shareUrl}`,
+                        url: shareUrl
+                    });
+                    console.log('Share successful');
+                } catch (error) {
+                    console.error('Web Share API error:', error);
+                    // If user cancels or error occurs, show copy option
                     if (error.name !== 'AbortError') {
-                        console.error('Error sharing:', error);
-                        // Fallback to clipboard
-                        fallbackShare(shareUrl, qrCodeData);
+                        showCopyOption(shareUrl);
                     }
-                });
+                }
             } else {
                 // Fallback for browsers without Web Share API
-                fallbackShare(shareUrl, qrCodeData);
+                showCopyOption(shareUrl);
+            }
+        });
+    }
+
+    // Show copy option with a nice UI
+    function showCopyOption(shareUrl) {
+        // Create a modal/dialog for copying
+        const copyDialog = document.createElement('div');
+        copyDialog.style.position = 'fixed';
+        copyDialog.style.top = '50%';
+        copyDialog.style.left = '50%';
+        copyDialog.style.transform = 'translate(-50%, -50%)';
+        copyDialog.style.background = 'white';
+        copyDialog.style.padding = '24px';
+        copyDialog.style.borderRadius = '12px';
+        copyDialog.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
+        copyDialog.style.zIndex = '1000';
+        copyDialog.style.maxWidth = '90%';
+        copyDialog.style.textAlign = 'center';
+
+        const urlInput = document.createElement('input');
+        urlInput.type = 'text';
+        urlInput.value = shareUrl;
+        urlInput.readOnly = true;
+        urlInput.style.width = '100%';
+        urlInput.style.padding = '12px';
+        urlInput.style.margin = '12px 0';
+        urlInput.style.border = '1px solid #ddd';
+        urlInput.style.borderRadius = '6px';
+        urlInput.style.fontSize = '14px';
+
+        const copyButton = document.createElement('button');
+        copyButton.textContent = 'Copy Link';
+        copyButton.style.background = 'linear-gradient(135deg, #0d7068 0%, #5a9e1e 100%)';
+        copyButton.style.color = 'white';
+        copyButton.style.border = 'none';
+        copyButton.style.padding = '12px 24px';
+        copyButton.style.borderRadius = '8px';
+        copyButton.style.fontSize = '16px';
+        copyButton.style.fontWeight = '600';
+        copyButton.style.cursor = 'pointer';
+        copyButton.style.marginTop = '12px';
+
+        const closeButton = document.createElement('button');
+        closeButton.textContent = 'Close';
+        closeButton.style.background = '#f0f0f0';
+        closeButton.style.color = '#333';
+        closeButton.style.border = 'none';
+        closeButton.style.padding = '10px 20px';
+        closeButton.style.borderRadius = '6px';
+        closeButton.style.fontSize = '14px';
+        closeButton.style.cursor = 'pointer';
+        closeButton.style.marginLeft = '12px';
+
+        copyDialog.innerHTML = `<h3 style="margin-bottom: 16px; color: #0d7068;">Share This Card</h3>
+                                <p style="margin-bottom: 12px; color: #666;">Copy this link to share your business card:</p>`;
+        copyDialog.appendChild(urlInput);
+        copyDialog.appendChild(copyButton);
+        copyDialog.appendChild(closeButton);
+
+        document.body.appendChild(copyDialog);
+
+        // Copy functionality
+        copyButton.addEventListener('click', () => {
+            urlInput.select();
+            urlInput.setSelectionRange(0, 99999);
+            
+            navigator.clipboard.writeText(shareUrl)
+                .then(() => {
+                    copyButton.textContent = 'Copied! ✓';
+                    copyButton.style.background = '#8CC63F';
+                    setTimeout(() => {
+                        document.body.removeChild(copyDialog);
+                    }, 1500);
+                })
+                .catch((error) => {
+                    console.error('Copy failed:', error);
+                    alert('Copy failed. Please manually copy the URL above.');
+                });
+        });
+
+        // Close functionality
+        closeButton.addEventListener('click', () => {
+            document.body.removeChild(copyDialog);
+        });
+
+        // Close when clicking outside
+        copyDialog.addEventListener('click', (e) => {
+            if (e.target === copyDialog) {
+                document.body.removeChild(copyDialog);
             }
         });
     }
@@ -181,20 +272,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error loading shared data:', error);
             }
         }
-    }
-
-    // Fallback share method (clipboard + alert)
-    function fallbackShare(shareUrl, qrCodeData) {
-        // Copy URL to clipboard
-        navigator.clipboard.writeText(shareUrl)
-            .then(() => {
-                alert(`Link copied to clipboard!\n\nYou can share this URL: ${shareUrl}`);
-            })
-            .catch((error) => {
-                console.error('Error copying to clipboard:', error);
-                // Show URL in a prompt if clipboard fails
-                prompt('Copy this URL to share:', shareUrl);
-            });
     }
 
     // Load shared data when page loads
