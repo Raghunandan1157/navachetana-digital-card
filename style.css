@@ -601,20 +601,16 @@ body {
         aspect-ratio: 700 / 380;
     }
 
+    .card-content-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
     .card-wrapper {
         width: 100%;
-    }
-
-    .person-info h1 {
-        font-size: 20px;
-    }
-
-    .contact-row span {
-        font-size: 11px;
-    }
-
-    .address-block p {
-        font-size: 10px;
     }
 
     .qr-section,
