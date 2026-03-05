@@ -161,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const vCardBlob = new Blob([vCardData], { type: 'text/vcard' });
         const vCardUrl = URL.createObjectURL(vCardBlob);
         const cardName = inputs.name.value.trim();
+        const cardDesignation = inputs.designation.value.trim();
 
         // Create overlay with proper CSS classes
         const overlay = document.createElement('div');
@@ -169,26 +170,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const dialog = document.createElement('div');
         dialog.className = 'share-dialog';
         dialog.innerHTML = `
-            <h3>Share This Card</h3>
-            <p class="share-subtitle">Choose how to share:</p>
-
-            <a href="${shareUrl}" target="_blank" class="share-action share-action-website">
-                <i class="fa-solid fa-globe"></i> Open Website
-            </a>
-            <p class="share-action-hint">View the digital business card</p>
-
-            <a href="${vCardUrl}" download="${encodeURIComponent(cardName)}.vcf" class="share-action share-action-contact">
-                <i class="fa-solid fa-address-book"></i> Save Contact
-            </a>
-            <p class="share-action-hint">Download as vCard to save to contacts</p>
-
-            <div class="share-copy-section">
-                <p>Or copy the website link:</p>
-                <div class="share-copy-row">
-                    <input type="text" value="${shareUrl}" readonly>
-                    <button id="copy-link-btn">Copy</button>
-                </div>
+            <div class="share-person">
+                <h3 class="share-person-name">${cardName}</h3>
+                <p class="share-person-designation">${cardDesignation}</p>
             </div>
+
+            <div class="share-links">
+                <a href="${vCardUrl}" download="${encodeURIComponent(cardName)}.vcf" class="share-link-row">
+                    <span class="share-link-label"><i class="fa-solid fa-address-book"></i> Save Contact</span>
+                    <span class="share-link-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+                <a href="${shareUrl}" target="_blank" class="share-link-row">
+                    <span class="share-link-label"><i class="fa-solid fa-globe"></i> Open Website</span>
+                    <span class="share-link-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+            </div>
+
             <button class="share-close-btn">Close</button>
         `;
 
@@ -199,19 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.removeChild(overlay);
             URL.revokeObjectURL(vCardUrl);
         }
-
-        // Copy functionality
-        dialog.querySelector('#copy-link-btn').addEventListener('click', function () {
-            navigator.clipboard.writeText(shareUrl)
-                .then(() => {
-                    this.textContent = 'Copied!';
-                    this.style.background = '#8CC63F';
-                })
-                .catch(() => {
-                    dialog.querySelector('.share-copy-row input').select();
-                    document.execCommand('copy');
-                });
-        });
 
         dialog.querySelector('.share-close-btn').addEventListener('click', closeModal);
         overlay.addEventListener('click', (e) => {
