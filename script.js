@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
         designation: document.getElementById('designation'),
         company: document.getElementById('company'),
         phone: document.getElementById('phone'),
+        email: document.getElementById('email'),
         website: document.getElementById('website'),
         location: document.getElementById('location')
     };
@@ -14,12 +15,22 @@ document.addEventListener('DOMContentLoaded', () => {
         designation: document.getElementById('preview-designation'),
         company: document.getElementById('preview-company'),
         phone: document.getElementById('preview-phone'),
+        email: document.getElementById('preview-email'),
         website: document.getElementById('preview-website'),
         location: document.getElementById('preview-location'),
         locationLabel: document.getElementById('preview-location-label')
     };
 
+    const formLocationLabel = document.getElementById('location-form-label');
     let currentLocationLabel = 'Head Office';
+
+    function setLocationLabel(label) {
+        currentLocationLabel = label || 'Head Office';
+        if (preview.locationLabel) preview.locationLabel.textContent = currentLocationLabel;
+        if (formLocationLabel) {
+            formLocationLabel.innerHTML = `<i class="fa-solid fa-location-dot"></i> ${currentLocationLabel}`;
+        }
+    }
 
     const jsonOutput = document.getElementById('json-output');
     const qrContainer = document.getElementById('qr-code');
@@ -63,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         if (cleanPhone) lines.push(`TEL;TYPE=CELL:${cleanPhone}`);
+        if (data.email) lines.push(`EMAIL:${data.email}`);
         if (data.website) lines.push(`URL:${normalizeWebsite(data.website)}`);
         if (data.location) lines.push(`ADR;TYPE=WORK:;;${data.location.replace(/\n/g, ', ')};;;;`);
 
@@ -78,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
             designation: inputs.designation.value.trim(),
             company: inputs.company.value.trim(),
             phone: inputs.phone.value.trim(),
+            email: inputs.email.value.trim(),
             website: inputs.website.value.trim(),
             location: inputs.location.value.trim(),
             locationLabel: currentLocationLabel
@@ -93,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         preview.designation.textContent = cardData.designation || 'Designation';
         preview.company.textContent = cardData.company || 'Company Name';
         preview.phone.textContent = cardData.phone || '—';
+        preview.email.textContent = cardData.email || '—';
         preview.website.textContent = cardData.website || 'www.example.com';
         preview.location.textContent = cardData.location.replace(/\n/g, ', ') || 'Office Address';
         if (preview.locationLabel) preview.locationLabel.textContent = currentLocationLabel;
@@ -230,9 +244,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (decodedData.designation) inputs.designation.value = decodedData.designation;
                 if (decodedData.company) inputs.company.value = decodedData.company;
                 if (decodedData.phone) inputs.phone.value = decodedData.phone;
+                if (decodedData.email !== undefined) inputs.email.value = decodedData.email;
                 if (decodedData.website) inputs.website.value = decodedData.website;
-                if (decodedData.location) inputs.location.value = decodedData.location;
-                if (decodedData.locationLabel) currentLocationLabel = decodedData.locationLabel;
+                if (decodedData.location !== undefined) inputs.location.value = decodedData.location;
+                if (decodedData.locationLabel) setLocationLabel(decodedData.locationLabel);
 
                 updateCard();
             } catch (error) {

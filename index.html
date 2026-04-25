@@ -48,14 +48,20 @@
                     <input type="text" id="phone" value="08375-233527" placeholder="Phone">
                 </div>
 
-                <div class="form-group">
-                    <label for="website"><i class="fa-solid fa-globe"></i> Website</label>
-                    <input type="text" id="website" value="www.navachetanasouhardha.com" placeholder="Enter website">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email"><i class="fa-solid fa-envelope"></i> Email</label>
+                        <input type="email" id="email" value="" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="website"><i class="fa-solid fa-globe"></i> Website</label>
+                        <input type="text" id="website" value="www.navachetanasouhardha.com" placeholder="Enter website">
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="location"><i class="fa-solid fa-location-dot"></i> Head Office</label>
-                    <textarea id="location" rows="2" placeholder="Enter head office address">"Hitaishi", Shirur Building, P.B. Road, HAVERI-581 110.</textarea>
+                    <label for="location" id="location-form-label"><i class="fa-solid fa-location-dot"></i> Head Office</label>
+                    <textarea id="location" rows="2" placeholder="Enter office address"></textarea>
                 </div>
             </form>
 
@@ -115,6 +121,11 @@
                                 <span class="contact-label">Phone</span>
                                 <span class="contact-sep">:</span>
                                 <span id="preview-phone">08375-233527</span>
+                            </p>
+                            <p class="contact-line">
+                                <span class="contact-label">Email</span>
+                                <span class="contact-sep">:</span>
+                                <span id="preview-email"></span>
                             </p>
                             <p class="contact-line">
                                 <span class="contact-label">Website</span>
